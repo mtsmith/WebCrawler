@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "WebCrawler": {
-      "commandName": "Project",
-      "commandLineArgs": "www.mystaticpage.com"
-    }
-  }
-}
