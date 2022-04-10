@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "it6ptOxuBs0Ie9tImkzNzMObVhZmXt1EAQ/MUuge+/a0LRsMvbkTXrrXAtLGuHEVf2yqsaRq5ItwhcF1Rd+1Og==",
+  "success": true,
+  "projectFilePath": "D:\\Samples\\leet\\WebCrawler\\WebCrawler.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\tsmith\\.nuget\\packages\\htmlagilitypack\\1.11.42\\htmlagilitypack.1.11.42.nupkg.sha512"
+  ],
+  "logs": []
+}

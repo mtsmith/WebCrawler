@@ -21,6 +21,39 @@ namespace Channels
         Audio = 6,
     }
 
+    public static class UriHelpers
+    {
+        public static Uri Combine (this Uri baseUri, string url)
+        {
+            // baseUri=http://abc.com/path1, url=http://xyz.com/path2 => http://xyz.com/path2
+            if (url.StartsWith ("http"))
+            {
+                return new Uri (url);
+            }
+
+            // baseUri=http://abc.com/path1, url=//abc.com/path2 => http://abc.com/path2
+            if (url.StartsWith ("//"))
+            {
+                return new Uri (string.Format ("{0}:{1}", baseUri.Scheme, url));
+            }
+
+            // baseUri=http://abc.com/path1, url=/path2 => http://abc.com/path2
+            if (url.StartsWith ("/"))
+            {
+                var urlBuilder = new UriBuilder (baseUri);
+                urlBuilder.Path = url;
+                return urlBuilder.Uri;
+            }
+            else
+            {
+                // baseUri=http://abc.com/path1, url=path2 => http://abc.com/path1/path2
+                var urlBuilder = new UriBuilder (baseUri);
+                urlBuilder.Path += string.Format ("/{0}", url);
+                return urlBuilder.Uri;
+            }
+        }
+    }
+
     public class Tag : IEquatable<Tag>
     {
         public Tag (Uri parentUri, string childUrl, TagType tagType)
@@ -150,17 +183,19 @@ namespace Channels
         WorkQueue WorkQueue = new WorkQueue ();
         int ConcurrencyLevel;
 
-        public WebCrawler (string url, int concurrencyLevel = 3)
+        public WebCrawler (string url, bool sameSiteOnly, int concurrencyLevel = 3)
         {
             BaseUri = new UriBuilder (url).Uri;
             Blacklist = new HashSet<string> ();
             ErrorList = new ErrorList ();
             ConcurrencyLevel = concurrencyLevel;
+            SameSiteOnly = sameSiteOnly;
         }
 
         public Uri BaseUri { get; }
         public HashSet<string> Blacklist { get; set; }
         public ErrorList ErrorList { get; set; }
+        public bool SameSiteOnly { get; set; }
 
         public async Task Crawl ()
         {
@@ -171,18 +206,20 @@ namespace Channels
                     SingleReader = false,
                 });
 
+            // Add our root url to the queue
             var tag = new Tag (BaseUri, "/", TagType.Anchor);
             WorkQueue.Enqueue (tag);
 
+            // Using a Semaphore to limit the number of concurrent tasks
             SemaphoreSlim downloadSemaphore = new SemaphoreSlim (ConcurrencyLevel, ConcurrencyLevel);
-            List<Task> downloadTasks = CreateDownloadTasks (DownloadChannel, downloadSemaphore);
 
-            await CreateMessagePumpTask (DownloadChannel, downloadSemaphore);
+            List<Task> downloadTasks = CreateSubscriber (DownloadChannel, downloadSemaphore);
+            await CreatePublisher (DownloadChannel, downloadSemaphore);
 
             await Task.WhenAll (downloadTasks);
         }
 
-        private List<Task> CreateDownloadTasks (Channel<Tag> DownloadChannel, SemaphoreSlim downloadSemaphore)
+        private List<Task> CreateSubscriber (Channel<Tag> DownloadChannel, SemaphoreSlim downloadSemaphore)
         {
             var downloadTasks = new List<Task> ();
             for (var i = 0; i < ConcurrencyLevel; i++)
@@ -220,6 +257,7 @@ namespace Channels
                             catch (Exception ex)
                             {
                                 Trace.WriteLine (string.Format ("{0}: Error: {1}", taskId, ex.Message));
+                                ErrorList.Add (tag.ChildUrl, ex.Message);
                             }
                             finally
                             {
@@ -236,7 +274,7 @@ namespace Channels
             return downloadTasks;
         }
 
-        private async Task CreateMessagePumpTask (Channel<Tag> DownloadChannel, SemaphoreSlim downloadSemaphore)
+        private async Task CreatePublisher (Channel<Tag> DownloadChannel, SemaphoreSlim downloadSemaphore)
         {
             await Task.Run (async () =>
             {
@@ -302,7 +340,7 @@ namespace Channels
                         continue;
                     }
 
-                    if (!tag.IsSameSite)
+                    if (SameSiteOnly && !tag.IsSameSite)
                     {
                         continue;
                     }
@@ -393,7 +431,7 @@ namespace Channels
     {
         static async Task Main (string[] args)
         {
-            var webCrawler = new WebCrawler (args[0]);
+            var webCrawler = new WebCrawler (args[0], sameSiteOnly: true);
             webCrawler.Blacklist.Add ("/#");
             await webCrawler.Crawl ();
         }

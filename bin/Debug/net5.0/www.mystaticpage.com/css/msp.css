@@ -1,0 +1,250 @@
+html, body {
+    font-family: 'Merriweather Sans', Arial, Helvetica, sans-serif;    
+    height: 100vh;
+    height: 100%;
+}
+#narrowAdRow {
+    margin-bottom: 30px;
+}
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+#dataFileUploadArea {
+    border: 3px dashed;  
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 40px;
+}
+#dataFileUploadArea.dragover {
+    border: 3px dashed yellow;  
+}
+#dataFileUploadArea.dragover * { 
+    pointer-events: none;
+}
+
+#avatarPreviewLabel {
+    display: block;
+    padding: 3px;  
+}
+#avatarPreviewLabel.dragover {
+    padding: 0px;
+    border: 3px dashed yellow;  
+}
+#avatarPreview, #avatarUploadProgress {
+    max-height: 300px;
+    margin: 0px auto;
+}
+#avatarUploadProgress {
+    width: 80%;
+    height: 70px;
+    margin: 80px auto;
+    text-align: center;
+    vertical-align: middle;
+}
+#sitePreview {
+    height: 60%;
+    min-height: 700px;
+    width: 100%;
+    margin-top: 10px;
+}
+#themeSelector {
+    overflow-x: scroll; 
+    overflow-y: hidden;
+    /*padding: 5px;
+    background-color: white;*/
+    max-height: 280px;
+}
+#themeSelector > .theme-selector-item {
+    display: table-cell;
+    min-width: 150px;
+    padding-right: 3px;
+}
+#themeSelector .theme-preview img {
+    border: 2px solid #c8c8c8;
+    border-radius: 3px;
+    padding: 3px;
+    max-width: 200px;
+    max-height: 150px;
+}
+#themeSelector .theme-preview img:hover {
+    border-color: #fff;
+}
+#themeSelector .theme-preview.selected img {
+    border-color: #08c808;
+    border-width: 5px;
+}
+.msp-brand {
+    font-family: 'Indie Flower', cursive;
+    font-size: 1.2em;
+}
+.navbar-brand {
+    font-family: 'Indie Flower', cursive;
+    color: yellow;
+}
+#downloadSection {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+#downloadSection h1 {
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+#nextStepsPanel, #nextStepsPanel > h2 {
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+#nextStepsPanel .next-step {
+    margin-bottom: 30px;
+}
+#nextStepsPanel .next-step .next-step-icon {
+    font-size: 9em;
+    margin-bottom: -20px;
+}
+.social-sharing-buttons {
+    font-size: 2em;
+} 
+.social-sharing-buttons > a {
+    margin: 5px;
+}
+footer {
+    margin-top: 20px;
+}
+footer .footer-content {
+    text-align: center;
+    font-size: 0.9em;
+    padding-top: 20px;
+}
+.navbar {
+    margin: 0px;
+}
+
+header {
+    margin-bottom: 20px;
+}
+
+/*************/
+/* Home page */
+/*************/
+#homeIntroBlock {
+    background-color: slategray;
+    background-image: url('../images/headingbg.jpg');
+    background-position: center bottom;
+    background-size: cover;
+    margin: -20px 0px 40px 0px;
+}
+#homeIntroContentBlock {
+    padding-top: 50px;
+    min-height: 600px;
+}
+#previewWindowBox {
+    background-color: #888;
+    padding: 5px 5px 5px 5px;
+    box-shadow: 3px 3px 5px #222;
+}
+#previewWindowBox #browserBarEmulation {
+    margin: 5px;
+    font-size: 10px;
+}
+#previewWindowBox #browserBarEmulation .browser-button {
+    padding-right: 5px;
+}
+#previewWindowBox #addressBarEmulation {
+    display: inline-block;
+    background-color: #f8f8f8;
+    border: 1px solid #ccc;
+    color: #333;
+    padding: 3px;
+    margin-left: 5px;
+    width: 80%;
+}
+
+@media only screen and (min-width: 2500px) {
+    #homeIntroContentBlock {
+        /* prevent background content from going under text */
+        min-height: 800px;
+    }
+}
+
+/****************/
+/* Pricing page */
+/****************/
+#pricingPage .pricing-plans {
+    margin-top: 40px;
+    margin-bottom: 40px;    
+}
+#pricingPage .pricing-plans .plan-description {
+    margin-top: 10px;
+    border: 1px solid rgba(0,0,0,0.6);
+    border-radius: 3px;
+    padding: 0px 10px;
+}
+#pricingPage .pricing-plans .plan-description h2 {
+    margin: 0px -10px 10px -10px;
+    background-color: rgba(0,0,0,0.6);
+    padding: 10px;
+    white-space: nowrap;
+    text-align: center;
+}
+#pricingPage .pricing-plans .plan-description ul {
+    list-style: none;
+    padding-left: 0px;
+    line-height: 2em;
+    min-height: 150px;
+    text-align: center;
+}
+#pricingPage .pricing-plans .plan-description h3 {
+    margin: 0px -10px;
+    background-color: #7a8288;
+    padding: 10px;
+    text-align: center;
+}
+#pricingPage .pricing-plans .plan-description h3 .old-price {
+    text-decoration: line-through;
+    font-size: 0.7em;
+    color: #f55;
+}
+
+/****************/
+/* Manage page  */
+/****************/
+#changePasswordBlock input[type=password] {
+    max-width: 300px;
+}
+#manageAccountBlock .panel-body .row {
+    margin-bottom: 5px;
+}
+#manageAccountBlock h1 {
+    margin-top: 0px;
+}
+
+/*****************/
+/* Upgrade page  */
+/*****************/
+#updgradePageBlock .price-box {
+    text-align: center;
+    margin: 40px 0px;
+    background-color: #7a8288;
+    border-radius: 3px;
+    padding: 10px;
+}
+#updgradePageBlock .price-box .old-price {
+    text-decoration: line-through;
+    font-size: 24px;
+    color: #f55;
+}
